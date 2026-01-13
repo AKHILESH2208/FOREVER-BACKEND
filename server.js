@@ -23,37 +23,41 @@ app.use(express.json())
 // CORS configuration
 const corsOptions = {
     origin: function (origin, callback) {
-        const allowedOrigins = [
-            'http://localhost:3000',
-            'http://localhost:5173',
-            'http://localhost:5174',
-            /\.netlify\.app$/,  // Allows all Netlify domains
-            /\.vercel\.app$/    // Allows all Vercel domains
-        ];
-        
         // Allow requests with no origin (like mobile apps or Postman)
         if (!origin) return callback(null, true);
         
-        // Check if origin matches any allowed pattern
-        const isAllowed = allowedOrigins.some(pattern => {
-            if (pattern instanceof RegExp) {
-                return pattern.test(origin);
-            }
-            return pattern === origin;
-        });
+        // Allow localhost
+        if (origin.includes('localhost')) return callback(null, true);
         
-        if (isAllowed) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
+        // Allow Netlify and Vercel domains
+        if (origin.endsWith('.netlify.app') || origin.endsWith('.vercel.app')) {
+            return callback(null, true);
         }
+        
+        // Allow specific origins if you have custom domains
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:5173',
+            'http://localhost:5174'
+        ];
+        
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'token']
+    allowedHeaders: ['Content-Type', 'Authorization', 'token', 'x-requested-with'],
+    exposedHeaders: ['Content-Length', 'Content-Type'],
+    maxAge: 86400
 };
 
 app.use(cors(corsOptions))
+
+// Handle preflight requests
+app.options('*', cors(corsOptions))
 
 // api endpoints
 app.use('/api/user',userRouter)
