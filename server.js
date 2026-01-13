@@ -28,10 +28,6 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "token"],
 }));
 
-app.options("*", cors());
-
-
-
 // api endpoints
 app.use('/api/user',userRouter)
 app.use('/api/product',productRouter)
