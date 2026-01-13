@@ -19,7 +19,22 @@ connectCloudinary()
 
 // Middlewares
 app.use(express.json())
-app.use(cors())
+
+// CORS configuration - Allow all origins for production deployment
+const corsOptions = {
+    origin: true, // Allow all origins
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'token', 'x-requested-with'],
+    exposedHeaders: ['Content-Length', 'Content-Type'],
+    maxAge: 86400,
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions))
+
+// Handle preflight requests
+app.options('*', cors(corsOptions))
 
 // api endpoints
 app.use('/api/user',userRouter)
