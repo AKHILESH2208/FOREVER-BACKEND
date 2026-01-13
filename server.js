@@ -56,9 +56,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
-// Handle preflight requests
-app.options('*', cors(corsOptions))
-
 // api endpoints
 app.use('/api/user',userRouter)
 app.use('/api/product',productRouter)
