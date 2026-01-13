@@ -21,16 +21,16 @@ connectCloudinary()
 app.use(express.json())
 
 // CORS configuration - Allow all origins for production deployment
-const corsOptions = {
-    origin: true, // Allow all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'token', 'x-requested-with'],
-    exposedHeaders: ['Content-Length', 'Content-Type'],
-    maxAge: 86400,
-    optionsSuccessStatus: 200
-};
+app.use(cors({
+  origin: "https://forever-ecom-frontend.netlify.app",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
+}));
 
-app.use(cors(corsOptions))
+app.options("*", cors());
+
+
 
 // api endpoints
 app.use('/api/user',userRouter)
