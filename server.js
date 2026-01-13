@@ -23,7 +23,6 @@ app.use(express.json())
 // CORS configuration - Allow all origins for production deployment
 const corsOptions = {
     origin: true, // Allow all origins
-    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'token', 'x-requested-with'],
     exposedHeaders: ['Content-Length', 'Content-Type'],
